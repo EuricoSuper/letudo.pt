@@ -51,7 +51,11 @@
             <?php endif; ?>
 
             <div class="livro-imagem">
-                &#128214;
+                <?php if(!empty($p['imagem'])): ?>
+                <img src="img/<?= htmlspecialchars($p['imagem']) ?>" alt="<?= htmlspecialchars($p['nome']) ?>" style="width: 100%; height: 100%; object-fit: contain;">
+                <?php else: ?>
+                <span style="font-size: 50px;">📖</span>
+                <?php endif; ?>
             </div>
 
             <div class="livro-conteudo">
