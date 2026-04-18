@@ -1,4 +1,9 @@
 <?php require 'config/db.php'; ?>
+
+// Verifica se existe alguém logado
+$logado = isset($_SESSION['usuario_id']);
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -10,18 +15,20 @@
 <body>
 
 <!-- Navegacao -->
-<nav class="navbar-custom">
-    <div class="container">
-        <a class="navbar-brand" href="index.php">&#128218; Livraria Letudo</a>
-        <div class="nav-buttons">
-            <?php if(isset($_SESSION['admin'])): ?>
-                <a href="admin.php" class="btn btn-warning btn-sm">Painel Admin</a>
-                <a href="logout.php" class="btn btn-outline btn-sm">Sair</a>
-            <?php else: ?>
-                <a href="login.php" class="btn btn-outline btn-sm">Login Admin</a>
-            <?php endif; ?>
-        </div>
-    </div>
+<nav class="nav-buttons">
+    <?php if(isset($_SESSION['usuario_id'])): ?>
+        <a href="pages/perfil.php" class="btn btn-sm">👤 Minha Conta</a>
+        
+        <?php if(isset($_SESSION['admin'])): ?>
+            <a href="admin.php" class="btn btn-warning btn-sm">Painel Admin</a>
+        <?php endif; ?>
+
+        <a href="pages/logout.php" class="btn btn-outline btn-sm">Sair</a>
+
+    <?php else: ?>
+        <a href="pages/login.php" class="btn">Entrar</a>
+        <a href="pages/registo.php" class="btn">Registar</a>
+    <?php endif; ?>
 </nav>
 
 <!-- Hero -->
