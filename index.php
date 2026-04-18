@@ -1,9 +1,9 @@
 <?php
-// ==================== TOPO DO FICHEIRO ====================
+// ==================== TOPO DO index.php ====================
 session_start();
-require_once 'config/db.php';   // ← Conexão à base de dados
+require_once 'config/db.php';   // ← Isto é obrigatório
 
-// Query segura para mostrar os livros
+// Query segura - mostra os últimos 20 livros
 $stmt = $pdo->query("SELECT id, titulo, preco, imagem FROM produtos ORDER BY id DESC LIMIT 20");
 $livros = $stmt->fetchAll();
 ?>
@@ -14,27 +14,29 @@ $livros = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Letudo.pt - Livraria Online</title>
-    <link rel="stylesheet" href="css/style.css">   <!-- ajusta se o teu CSS estiver noutro sítio -->
+    
+    <!-- Ajusta o caminho do CSS se estiver noutra pasta -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <header>
-        <h1>Bem-vindo à Letudo.pt</h1>
+        <h1>Letudo.pt</h1>
         <nav>
             <a href="index.php">Início</a>
-            <a href="pages/registo.php">Registar</a>
-            <a href="pages/login.php">Login</a>
             <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="perfil.php">Olá, <?= htmlspecialchars($_SESSION['user_nome'] ?? 'Utilizador') ?></a>
+                <a href="perfil.php">Olá, <?= htmlspecialchars($_SESSION['user_nome'] ?? '') ?></a>
                 <a href="logout.php">Sair</a>
+            <?php else: ?>
+                <a href="pages/registo.php">Registar</a>
+                <a href="pages/login.php">Login</a>
             <?php endif; ?>
         </nav>
     </header>
 
     <main>
-        <h2>Últimos Livros Disponíveis</h2>
+        <h2>Últimos Livros em Stock</h2>
 
-        <!-- ==================== AQUI VAI O TEU CÓDIGO ==================== -->
         <div class="catalogo">
             <?php if (empty($livros)): ?>
                 <p>Não há livros disponíveis de momento.</p>
@@ -45,21 +47,19 @@ $livros = $stmt->fetchAll();
                             <img src="<?= htmlspecialchars($livro['imagem']) ?>" 
                                  alt="<?= htmlspecialchars($livro['titulo']) ?>">
                         <?php endif; ?>
-                        
+
                         <h3><?= htmlspecialchars($livro['titulo']) ?></h3>
                         <p class="preco"><?= number_format($livro['preco'], 2, ',', ' ') ?> €</p>
                         
-                        <a href="comprar.php?id=<?= $livro['id'] ?>" class="btn-comprar">Comprar Agora</a>
+                        <a href="comprar.php?id=<?= $livro['id'] ?>" class="btn">Comprar Agora</a>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-        <!-- ==================== FIM DO TEU CÓDIGO ==================== -->
-
     </main>
 
     <footer>
-        <p>&copy; 2026 Letudo.pt - Todos os direitos reservados</p>
+        <p>&copy; <?= date("Y") ?> Letudo.pt</p>
     </footer>
 
 </body>
