@@ -1,26 +1,111 @@
 <?php
-// index.php - Versão de emergência (sem depender do db.php)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-echo "<h1>Letudo.pt - Modo Diagnóstico</h1>";
-echo "<p style='color:orange;'>A tentar carregar...</p>";
-
-if (file_exists('config/db.php')) {
-    require_once 'config/db.php';
-    echo "<p style='color:green;'>✓ config/db.php encontrado e carregado.</p>";
-    
-    if (isset($pdo)) {
-        echo "<p style='color:green;'>✓ Conexão à BD OK.</p>";
-    } else {
-        echo "<p style='color:red;'>✗ Variável \$pdo não definida.</p>";
-    }
-} else {
-    echo "<p style='color:red;'>✗ ERRO: config/db.php NÃO existe!<br>";
-    echo "Cria a pasta config/ e o ficheiro db.php dentro dela.</p>";
-}
-
-echo "<hr>";
-echo "<p><a href='pages/registo.php'>Registo</a> | <a href='pages/login.php'>Login</a></p>";
-echo "<p><small>Última atualização: " . date('H:i:s') . "</small></p>";
+session_start();
+require_once 'config/db.php';   // ← Conexão segura
 ?>
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livraria Letudo | Descobre os Melhores Livros</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Navegação -->
+<nav class="navbar-custom">
+    <div class="container">
+        <a href="index.php" class="navbar-brand">📖 Letudo.pt</a>
+        
+        <div class="nav-buttons">
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <a href="perfil.php" class="btn btn-outline">👤 <?= htmlspecialchars($_SESSION['user_nome'] ?? 'Conta') ?></a>
+                <a href="logout.php" class="btn btn-danger btn-sm">Sair</a>
+            <?php else: ?>
+                <a href="pages/login.php" class="btn">Entrar</a>
+                <a href="pages/registo.php" class="btn btn-primary">Registar</a>
+            <?php endif; ?>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <span class="hero-icon">📚</span>
+        <h1>Livraria Letudo</h1>
+        <p class="hero-subtitle">Descobre histórias que transformam vidas. Encontra o teu próximo livro favorito.</p>
+    </div>
+</section>
+
+<!-- Catálogo de Livros -->
+<section class="secao-livros">
+    <div class="secao-titulo">
+        <h2>O Nosso Catálogo</h2>
+        <p class="subtitulo">Livros cuidadosamente selecionados para ti</p>
+    </div>
+
+    <div class="livros-grid">
+        <?php
+        try {
+            $stmt = $pdo->query("SELECT id, nome, preco_unidade, quantidade_disponivel, imagem 
+                                 FROM produtos 
+                                 ORDER BY id DESC");
+            $livros = $stmt->fetchAll();
+
+            if (empty($livros)) {
+                echo "<p style='text-align:center; grid-column:1/-1;'>Não há livros disponíveis de momento.</p>";
+            } else {
+                foreach ($livros as $p):
+        ?>
+            <div class="livro-card">
+                <?php if ($p['quantidade_disponivel'] <= 0): ?>
+                    <span class="badge-esgotado">Esgotado</span>
+                <?php endif; ?>
+
+                <div class="livro-imagem">
+                    <?php if (!empty($p['imagem'])): ?>
+                        <img src="img/<?= htmlspecialchars($p['imagem']) ?>" 
+                             alt="<?= htmlspecialchars($p['nome']) ?>">
+                    <?php else: ?>
+                        <span style="font-size: 60px;">📖</span>
+                    <?php endif; ?>
+                </div>
+
+                <div class="livro-conteudo">
+                    <h3 class="livro-titulo"><?= htmlspecialchars($p['nome']) ?></h3>
+                    
+                    <p class="livro-preco">
+                        <span class="moeda">€</span><?= number_format($p['preco_unidade'], 2, ',', ' ') ?>
+                    </p>
+
+                    <p class="livro-stock <?= $p['quantidade_disponivel'] > 0 ? 'stock-disponivel' : 'stock-esgotado' ?>">
+                        <?= $p['quantidade_disponivel'] > 0 ? 'Em stock' : 'Fora de stock' ?> 
+                        · <?= $p['quantidade_disponivel'] ?> unid.
+                    </p>
+
+                    <?php if ($p['quantidade_disponivel'] > 0): ?>
+                        <a href="checkout.php?id=<?= $p['id'] ?>" class="btn btn-primary">Comprar Agora</a>
+                    <?php else: ?>
+                        <button class="btn btn-secondary" disabled>Esgotado</button>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php
+                endforeach;
+            }
+        } catch (Exception $e) {
+            echo "<p style='color:red; grid-column:1/-1;'>Erro ao carregar os livros: " . htmlspecialchars($e->getMessage()) . "</p>";
+        }
+        ?>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <p>&copy; <?= date("Y") ?> Livraria Letudo. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>
