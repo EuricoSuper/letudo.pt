@@ -1,32 +1,26 @@
 <?php
-// index.php - Versão mínima para diagnosticar o erro
+// index.php - Versão de emergência (sem depender do db.php)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-echo "<h1>Teste Letudo.pt - Diagnóstico</h1>";
+echo "<h1>Letudo.pt - Modo Diagnóstico</h1>";
+echo "<p style='color:orange;'>A tentar carregar...</p>";
 
-if (!file_exists('config/db.php')) {
-    die("<p style='color:red;'>ERRO: O ficheiro config/db.php NÃO foi encontrado!<br>Verifica se a pasta config existe e o ficheiro db.php está dentro dela.</p>");
+if (file_exists('config/db.php')) {
+    require_once 'config/db.php';
+    echo "<p style='color:green;'>✓ config/db.php encontrado e carregado.</p>";
+    
+    if (isset($pdo)) {
+        echo "<p style='color:green;'>✓ Conexão à BD OK.</p>";
+    } else {
+        echo "<p style='color:red;'>✗ Variável \$pdo não definida.</p>";
+    }
+} else {
+    echo "<p style='color:red;'>✗ ERRO: config/db.php NÃO existe!<br>";
+    echo "Cria a pasta config/ e o ficheiro db.php dentro dela.</p>";
 }
 
-require_once 'config/db.php';
-
-echo "<p style='color:green;'>✓ config/db.php carregado com sucesso.</p>";
-
-if (!isset($pdo)) {
-    die("<p style='color:red;'>ERRO: A variável \$pdo não foi definida. Verifica o ficheiro db.php.</p>");
-}
-
-echo "<p style='color:green;'>✓ Conexão PDO OK.</p>";
-
-// Testar se a tabela existe
-try {
-    $stmt = $pdo->query("SELECT COUNT(*) as total FROM produtos");
-    $total = $stmt->fetchColumn();
-    echo "<p>Total de livros na tabela: <strong>$total</strong></p>";
-} catch (Exception $e) {
-    echo "<p style='color:red;'>ERRO na tabela 'produtos': " . htmlspecialchars($e->getMessage()) . "</p>";
-}
+echo "<hr>";
+echo "<p><a href='pages/registo.php'>Registo</a> | <a href='pages/login.php'>Login</a></p>";
+echo "<p><small>Última atualização: " . date('H:i:s') . "</small></p>";
 ?>
-
-<p><a href="pages/registo.php">Ir para Registo</a> | <a href="pages/login.php">Ir para Login</a></p>
