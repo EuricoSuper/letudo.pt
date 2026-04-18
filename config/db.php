@@ -2,7 +2,7 @@
 // config/db.php - Conexão à base de dados
 
 $host = 'localhost';
-$dbname = 'letudo';        // ← muda se o nome da tua base de dados for diferente
+$dbname = 'letudo.pt';        // ← muda se o nome da tua base de dados for diferente
 $username = 'root';        // ← muda para o utilizador da tua BD (normalmente root)
 $password = '';            // ← mete aqui a password da tua BD (se não tiveres, deixa vazio)
 
