@@ -1,74 +1,46 @@
-<?php require '../config/db.php'; ?>
+<?php
+// pages/login.php
+session_start();
+require_once '../config/db.php';
 
-// O session_start() deve estar preferencialmente dentro do db.php para evitar erros de duplicado
-// Mas se não estiver lá, podes colocar aqui.
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = $_POST['user'];
-    $pass = $_POST['pass'];
-
-    // 2. Procura o admin na base de dados
-    $stmt = $pdo->prepare("SELECT * FROM utilizadores WHERE nome_utilizador = ? AND nivel = 'admin'");
-    $stmt->execute([$user]);
-    $u = $stmt->fetch();
-
-    // 3. Verifica a senha (usando password_verify se estiverem encriptadas)
-    if ($u && password_verify($pass, $u['palavra_passe'])) {
-        $_SESSION['admin'] = true;
-        $_SESSION['usuario_id'] = $u['id'];
-        
-        // CORREÇÃO: Caminho para sair da pasta pages e ir para o admin na raiz
-        header("Location: ../admin.php"); 
-        exit;
-    } else {
-        $erro = "Utilizador ou Palavra-passe incorretos!";
-    }
+if (isset($_SESSION['user_id'])) {
+    header("Location: ../perfil.php");
+    exit;
 }
+
+$mensagem = $_SESSION['sucesso'] ?? '';
+$erros    = $_SESSION['erros_login'] ?? [];
+unset($_SESSION['sucesso'], $_SESSION['erros_login']);
 ?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Administrativo | Livraria Letudo</title>
-    
+    <title>Login - Letudo.pt</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="pagina-login">
+<body>
+    <h2>Entrar na tua conta</h2>
 
-    <div class="login-card">
-        <div class="login-header">
-            <div class="icon">🔐</div>
-            <h2>Acesso Administrativo</h2>
-            <p>Painel de gestão da livraria</p>
-        </div>
+    <?php if ($mensagem): ?>
+        <p style="color:green;"><?php echo htmlspecialchars($mensagem); ?></p>
+    <?php endif; ?>
 
-        <div class="login-body">
-            <?php if(isset($erro)): ?>
-                <div class="alert alert-danger" style="color: red; margin-bottom: 15px;">
-                    <?= $erro ?>
-                </div>
-            <?php endif; ?>
+    <?php foreach ($erros as $erro): ?>
+        <p style="color:red;"><?php echo htmlspecialchars($erro); ?></p>
+    <?php endforeach; ?>
 
-            <form method="POST">
-                <div class="form-group">
-                    <label for="user">Utilizador</label>
-                    <input type="text" id="user" name="user" class="form-control" placeholder="Nome de utilizador" required>
-                </div>
+    <form method="POST" action="processar_login.php">
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
 
-                <div class="form-group">
-                    <label for="pass">Palavra-passe</label>
-                    <input type="password" id="pass" name="pass" class="form-control" placeholder="A tua password" required>
-                </div>
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
 
-                <button type="submit" class="btn btn-primary w-100">Entrar</button>
-            </form>
-        </div>
+        <button type="submit">Entrar</button>
+    </form>
 
-        <div class="login-footer">
-            <a href="../index.php">&larr; Voltar à loja</a>
-        </div>
-    </div>
-
+    <p>Não tens conta? <a href="registo.php">Regista-te aqui</a></p>
 </body>
 </html>
