@@ -1,66 +1,42 @@
 <?php
-// ==================== TOPO DO index.php ====================
+// index.php - Versão simples para testar e corrigir erros
 session_start();
-require_once 'config/db.php';   // ← Isto é obrigatório
+error_reporting(E_ALL);
+ini_set('display_errors', 1);   // ← Mostra os erros para vermos o que está mal
 
-// Query segura - mostra os últimos 20 livros
-$stmt = $pdo->query("SELECT id, titulo, preco, imagem FROM produtos ORDER BY id DESC LIMIT 20");
+require_once 'config/db.php';   // Certifica-te que o caminho está correto!
+
+echo "<h1>Teste - Letudo.pt</h1>";
+
+if (!isset($pdo)) {
+    die("ERRO: Não consegui conectar à base de dados (pdo não definido).");
+}
+
+// Query segura
+$stmt = $pdo->query("SELECT id, titulo, preco, imagem FROM produtos ORDER BY id DESC LIMIT 12");
 $livros = $stmt->fetchAll();
+
+echo "<h2>Últimos Livros (" . count($livros) . " encontrados)</h2>";
+
+if (empty($livros)) {
+    echo "<p>Não há livros ou a tabela 'produtos' está vazia.</p>";
+} else {
+    echo '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">';
+    
+    foreach ($livros as $livro) {
+        echo '<div style="border: 1px solid #ccc; padding: 15px; text-align: center;">';
+        
+        if (!empty($livro['imagem'])) {
+            echo '<img src="' . htmlspecialchars($livro['imagem']) . '" style="max-width:100%; height:auto;"><br>';
+        }
+        
+        echo '<h3>' . htmlspecialchars($livro['titulo']) . '</h3>';
+        echo '<p><strong>' . number_format($livro['preco'], 2, ',', ' ') . ' €</strong></p>';
+        echo '<a href="comprar.php?id=' . $livro['id'] . '">Comprar</a>';
+        echo '</div>';
+    }
+    echo '</div>';
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Letudo.pt - Livraria Online</title>
-    
-    <!-- Ajusta o caminho do CSS se estiver noutra pasta -->
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-    <header>
-        <h1>Letudo.pt</h1>
-        <nav>
-            <a href="index.php">Início</a>
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="perfil.php">Olá, <?= htmlspecialchars($_SESSION['user_nome'] ?? '') ?></a>
-                <a href="logout.php">Sair</a>
-            <?php else: ?>
-                <a href="pages/registo.php">Registar</a>
-                <a href="pages/login.php">Login</a>
-            <?php endif; ?>
-        </nav>
-    </header>
-
-    <main>
-        <h2>Últimos Livros em Stock</h2>
-
-        <div class="catalogo">
-            <?php if (empty($livros)): ?>
-                <p>Não há livros disponíveis de momento.</p>
-            <?php else: ?>
-                <?php foreach ($livros as $livro): ?>
-                    <div class="livro">
-                        <?php if (!empty($livro['imagem'])): ?>
-                            <img src="<?= htmlspecialchars($livro['imagem']) ?>" 
-                                 alt="<?= htmlspecialchars($livro['titulo']) ?>">
-                        <?php endif; ?>
-
-                        <h3><?= htmlspecialchars($livro['titulo']) ?></h3>
-                        <p class="preco"><?= number_format($livro['preco'], 2, ',', ' ') ?> €</p>
-                        
-                        <a href="comprar.php?id=<?= $livro['id'] ?>" class="btn">Comprar Agora</a>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; <?= date("Y") ?> Letudo.pt</p>
-    </footer>
-
-</body>
-</html>
+<p><a href="pages/registo.php">Registar</a> | <a href="pages/login.php">Login</a></p>
