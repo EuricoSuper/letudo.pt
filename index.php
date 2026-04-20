@@ -1,6 +1,5 @@
-<?php
-session_start();
-require_once 'config/db.php';
+<?php 
+$total_itens = isset($_SESSION['carrinho']) ? array_sum($_SESSION['carrinho']) : 0;
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +13,16 @@ require_once 'config/db.php';
 <body>
 
 <!-- Navegação -->
+
+<div class="nav-buttons">
+    <a href="pages/checkout.php" class="btn-carrinho" id="cart-icon">
+        <span class="icon">🛒</span>
+        <span class="badge" id="cart-count"><?= $total_itens ?></span>
+        <span class="text">O meu carrinho</span>
+    </a>
+    <!-- Outros botões de login... -->
+</div>
+
 <nav class="navbar-custom">
     <!-- NOVO: Contador do Carrinho -->
     <?php 

@@ -176,6 +176,29 @@ a {
     font-size: 0.8rem;
 }
 
+.btn-carrinho {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.btn-carrinho .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e63946; /* Vermelho Almedina */
+    color: white;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 /* ============================================
    HERO / HEADER
    ============================================ */
