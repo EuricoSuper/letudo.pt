@@ -1,56 +1,74 @@
-<?php
-session_start();
-require_once __DIR__ . '/../config/db.php';
+<?php require '../config/db.php'; ?>
 
-$erro = $_SESSION['erro_login'] ?? '';
-$sucesso = $_SESSION['sucesso'] ?? '';
-unset($_SESSION['erro_login'], $_SESSION['sucesso']);
+// O session_start() deve estar preferencialmente dentro do db.php para evitar erros de duplicado
+// Mas se não estiver lá, podes colocar aqui.
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $ident = trim($_POST['identificador'] ?? '');
-    $pass  = $_POST['password'] ?? '';
-    $stmt  = $pdo->prepare("SELECT * FROM utilizadores WHERE email=? OR username=?");
-    $stmt->execute([$ident, $ident]);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $user = $_POST['user'];
+    $pass = $_POST['pass'];
+
+    // 2. Procura o admin na base de dados
+    $stmt = $pdo->prepare("SELECT * FROM utilizadores WHERE nome_utilizador = ? AND nivel = 'admin'");
+    $stmt->execute([$user]);
     $u = $stmt->fetch();
-    if ($u && password_verify($pass, $u['password'])) {
-        session_regenerate_id(true);
-        $_SESSION['user_id']   = $u['id'];
-        $_SESSION['user_nome'] = $u['nome'];
-        $_SESSION['user_tipo'] = $u['tipo'];
-        if ($u['tipo'] === 'admin') { header('Location: ../admin/index.php'); exit; }
-        header('Location: ../index.php'); exit;
+
+    // 3. Verifica a senha (usando password_verify se estiverem encriptadas)
+    if ($u && password_verify($pass, $u['palavra_passe'])) {
+        $_SESSION['admin'] = true;
+        $_SESSION['usuario_id'] = $u['id'];
+        
+        // CORREÇÃO: Caminho para sair da pasta pages e ir para o admin na raiz
+        header("Location: ../admin.php"); 
+        exit;
     } else {
-        $erro = 'Credenciais invalidas. Verifica o email/utilizador e a password.';
+        $erro = "Utilizador ou Palavra-passe incorretos!";
     }
 }
-
-$titulo = 'Iniciar sessao | Letudo.pt';
-$base = '../';
-require __DIR__ . '/../includes/header.php';
 ?>
-<div class="auth-wrap">
-    <div class="auth-card">
-        <h2>Iniciar sessao</h2>
-        <p class="sub">Entra na tua conta Letudo para acompanhar encomendas.</p>
-        <?php if ($erro): ?><div class="alert alert-danger" data-testid="login-error"><?= htmlspecialchars($erro) ?></div><?php endif; ?>
-        <?php if ($sucesso): ?><div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div><?php endif; ?>
-        <form method="POST">
-            <div class="form-group">
-                <label>Email ou nome de utilizador</label>
-                <input type="text" name="identificador" class="form-control" required autofocus data-testid="login-identificador">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required data-testid="login-password">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" data-testid="login-submit">Entrar</button>
-        </form>
-        <div class="auth-footer">
-            Nao tens conta? <a href="registo.php">Regista-te aqui</a>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Administrativo | Livraria Letudo</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="pagina-login">
+
+    <div class="login-card">
+        <div class="login-header">
+            <div class="icon">🔐</div>
+            <h2>Acesso Administrativo</h2>
+            <p>Painel de gestão da livraria</p>
         </div>
-        <div class="auth-footer" style="margin-top:14px; font-size:12px;">
-            <strong>Demo:</strong> admin / admin123 &nbsp;&middot;&nbsp; cliente / cliente123
+
+        <div class="login-body">
+            <?php if(isset($erro)): ?>
+                <div class="alert alert-danger" style="color: red; margin-bottom: 15px;">
+                    <?= $erro ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="user">Utilizador</label>
+                    <input type="text" id="user" name="user" class="form-control" placeholder="Nome de utilizador" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pass">Palavra-passe</label>
+                    <input type="password" id="pass" name="pass" class="form-control" placeholder="A tua password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+            </form>
+        </div>
+
+        <div class="login-footer">
+            <a href="../index.php">&larr; Voltar à loja</a>
         </div>
     </div>
-</div>
-<?php require __DIR__ . '/../includes/footer.php'; ?>
+
+</body>
+</html>
