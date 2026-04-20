@@ -2,6 +2,11 @@
 session_start();
 require '../config/db.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php?msg=faz_login_para_comprar");
+    exit;
+}
+
 // 1. Se o carrinho estiver vazio, nem deixa entrar no checkout
 if (!isset($_SESSION['carrinho']) || empty($_SESSION['carrinho'])) {
     header("Location: ../index.php");
