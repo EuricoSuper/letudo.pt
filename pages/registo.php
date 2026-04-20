@@ -17,9 +17,9 @@ require '../config/db.php';
         </div>
 
         <?php if (isset($_SESSION['erros_registo'])): ?>
-            <div class="alert alert-danger">
+            <div style="color: red; margin-bottom: 15px; border: 1px solid red; padding: 10px; border-radius: 5px; background: #fff5f5;">
                 <?php foreach ($_SESSION['erros_registo'] as $erro): ?>
-                    <p><?= htmlspecialchars($erro) ?></p>
+                    <p style="margin: 0; font-size: 0.9em;">⚠️ <?= htmlspecialchars($erro) ?></p>
                 <?php endforeach; unset($_SESSION['erros_registo']); ?>
             </div>
         <?php endif; ?>
@@ -39,8 +39,10 @@ require '../config/db.php';
                 <label>Senha</label>
                 <input type="password" name="password" class="form-control" required 
                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
-                       title="A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma minúscula, um número e um caractere especial.">
-                <small class="form-text text-muted">Mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número e 1 especial.</small>
+                       title="A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial.">
+                <small style="color: #666; font-size: 0.8em; display: block; margin-top: 5px;">
+                    Obrigatório: 8+ chars, MAIÚSCULA, minúscula, número e especial (@#$...).
+                </small>
             </div>
 
             <div class="form-group">
@@ -58,11 +60,11 @@ require '../config/db.php';
                 <input type="text" name="nif" class="form-control" maxlength="9">
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Criar Conta</button>
+            <button type="submit" class="btn btn-primary w-100" style="margin-top: 15px; padding: 10px; cursor: pointer;">Criar Conta</button>
         </form>
 
-        <div class="login-footer">
-            <a href="../index.php">&larr; Voltar à loja</a> | <a href="login.php">Já tenho conta</a>
+        <div class="login-footer" style="margin-top: 20px; text-align: center;">
+            <a href="../index.php" style="text-decoration: none; color: #666;">&larr; Voltar à loja</a> | <a href="login.php" style="text-decoration: none; color: #007bff;">Já tenho conta</a>
         </div>
     </div>
 </body>

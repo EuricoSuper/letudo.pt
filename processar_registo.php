@@ -20,22 +20,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erros[] = "Email inválido.";
     }
 
-    // Validação robusta de senha: 
-    // Mínimo 8 caracteres, pelo menos uma maiúscula, uma minúscula, um número e um caractere especial.
+    // VALIDAÇÃO OBRIGATÓRIA DE SENHA:
+    // 1. Mínimo 8 caracteres
+    // 2. Pelo menos uma letra MAIÚSCULA
+    // 3. Pelo menos uma letra minúscula
+    // 4. Pelo menos um NÚMERO
+    // 5. Pelo menos um CARACTERE ESPECIAL
+    
     if (strlen($password) < 8) {
         $erros[] = "A password deve ter pelo menos 8 caracteres.";
     }
     if (!preg_match('/[A-Z]/', $password)) {
-        $erros[] = "A password deve conter pelo menos uma letra maiúscula.";
+        $erros[] = "A password deve conter pelo menos uma letra MAIÚSCULA.";
     }
     if (!preg_match('/[a-z]/', $password)) {
         $erros[] = "A password deve conter pelo menos uma letra minúscula.";
     }
     if (!preg_match('/[0-9]/', $password)) {
-        $erros[] = "A password deve conter pelo menos um número.";
+        $erros[] = "A password deve conter pelo menos um NÚMERO.";
     }
     if (!preg_match('/[\W_]/', $password)) {
-        $erros[] = "A password deve conter pelo menos um caractere especial (ex: @, #, $, %, etc.).";
+        $erros[] = "A password deve conter pelo menos um CARACTERE ESPECIAL (ex: @, #, $, %, etc.).";
     }
 
     if ($password !== $confirm) {
@@ -57,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Registar utilizador
+    // Registar utilizador com hash seguro
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
     try {
