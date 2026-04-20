@@ -1,46 +1,57 @@
-<?php
-// pages/login.php
+<?php 
 session_start();
-require_once '../config/db.php';
+require '../config/db.php'; 
 
 if (isset($_SESSION['user_id'])) {
     header("Location: ../perfil.php");
     exit;
 }
-
-$mensagem = $_SESSION['sucesso'] ?? '';
-$erros    = $_SESSION['erros_login'] ?? [];
-unset($_SESSION['sucesso'], $_SESSION['erros_login']);
 ?>
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Letudo.pt</title>
+    <title>Entrar | Letudo</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
-    <h2>Entrar na tua conta</h2>
+<body class="pagina-login">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Bem-vindo de volta</h2>
+            <p>Faça login para continuar</p>
+        </div>
 
-    <?php if ($mensagem): ?>
-        <p style="color:green;"><?php echo htmlspecialchars($mensagem); ?></p>
-    <?php endif; ?>
+        <?php if (isset($_SESSION['sucesso'])): ?>
+            <div style="color: green; margin-bottom: 10px;">
+                <?= htmlspecialchars($_SESSION['sucesso']); unset($_SESSION['sucesso']); ?>
+            </div>
+        <?php endif; ?>
 
-    <?php foreach ($erros as $erro): ?>
-        <p style="color:red;"><?php echo htmlspecialchars($erro); ?></p>
-    <?php endforeach; ?>
+        <?php if (isset($_SESSION['erros_login'])): ?>
+            <div style="color: red; margin-bottom: 10px;">
+                <?php foreach ($_SESSION['erros_login'] as $erro): ?>
+                    <p><?= htmlspecialchars($erro) ?></p>
+                <?php endforeach; unset($_SESSION['erros_login']); ?>
+            </div>
+        <?php endif; ?>
 
-    <form method="POST" action="processar_login.php">
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+        <form action="../processar_login.php" method="POST" class="login-body">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
 
-        <button type="submit">Entrar</button>
-    </form>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
 
-    <p>Não tens conta? <a href="registo.php">Regista-te aqui</a></p>
+        <div class="login-footer">
+            <a href="../index.php">&larr; Voltar à loja</a> | <a href="registo.php">Criar nova conta</a>
+        </div>
+    </div>
 </body>
 </html>

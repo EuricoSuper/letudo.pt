@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/db.php';   // ← Conexão segura
+require_once 'config/db.php';
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +86,7 @@ require_once 'config/db.php';   // ← Conexão segura
                     </p>
 
                     <?php if ($p['quantidade_disponivel'] > 0): ?>
-                        <a href="checkout.php?id=<?= $p['id'] ?>" class="btn btn-primary">Comprar Agora</a>
+                        <a href="pages/checkout.php?id=<?= $p['id'] ?>" class="btn btn-primary">Comprar Agora</a>
                     <?php else: ?>
                         <button class="btn btn-secondary" disabled>Esgotado</button>
                     <?php endif; ?>
