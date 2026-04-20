@@ -1,18 +1,17 @@
 <?php
-// config/db.php - Conexão corrigida para a tua BD "letudo.pt"
-
-$host       = 'localhost';
-$dbname     = 'letudo.pt';     // ← Nome exato com o ponto
-$username   = 'root';
-$password   = '';              // deixa vazio se não puseste password no root
+// config/db.php - Conexao PDO a MariaDB/MySQL
+$host     = getenv('DB_HOST') ?: '127.0.0.1';
+$dbname   = getenv('DB_NAME_LETUDO') ?: 'letudo';
+$username = getenv('DB_USER') ?: 'letudo';
+$password = getenv('DB_PASS') ?: 'letudo_pass';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ]);
 } catch (PDOException $e) {
-    die("Erro de conexão à BD:<br><strong>" . htmlspecialchars($e->getMessage()) . "</strong>");
+    http_response_code(500);
+    die('Erro de conexao a BD: ' . htmlspecialchars($e->getMessage()));
 }
-?>
