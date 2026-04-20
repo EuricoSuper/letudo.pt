@@ -2,14 +2,30 @@
 session_start();
 require '../config/db.php';
 
-if(!isset($_GET['id'])) { header("Location: ../index.php"); exit; }
+// 1. OBRIGAR LOGIN: Se não houver user_id na sessão, manda para o login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
 
-$id = $_GET['id'];
-$stmt = $pdo->prepare("SELECT * FROM produtos WHERE id = ?");
-$stmt->execute([$id]);
-$produto = $stmt->fetch();
+// 2. VERIFICAR CARRINHO: Se o carrinho estiver vazio, volta para o index
+if (!isset($_SESSION['carrinho']) || empty($_SESSION['carrinho'])) {
+    echo "<script>alert('O seu carrinho está vazio!'); window.location.href='../index.php';</script>";
+    exit;
+}
 
-if (!$produto) { header("Location: ../index.php"); exit; }
+// 3. BUSCAR PRODUTOS DO CARRINHO
+$ids = array_keys($_SESSION['carrinho']);
+$placeholder = str_repeat('?,', count($ids) - 1) . '?';
+$stmt = $pdo->prepare("SELECT * FROM produtos WHERE id IN ($placeholder)");
+$stmt->execute($ids);
+$produtos_no_carrinho = $stmt->fetchAll();
+
+$total_encomenda = 0;
+foreach ($produtos_no_carrinho as $p) {
+    $quantidade = $_SESSION['carrinho'][$p['id']];
+    $total_encomenda += $p['preco_unidade'] * $quantidade;
+}
 
 $erro = "";
 
@@ -44,8 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Guardar Encomenda
         $user_id_fk = $_SESSION['user_id'] ?? null;
-        $stmt = $pdo->prepare("INSERT INTO encomendas (cliente_nome, data_nascimento, morada, total, usuario_id) VALUES (?,?,?,?,?)");
-        $stmt->execute([$nome, $data_nasc, $morada, $produto['preco_unidade'], $user_id_fk]);
+       
+        // Guardar Encomenda
+        $stmt = $pdo->prepare("INSERT INTO encomendas (cliente_nome, data_nascimento, morada, total, usuario_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$nome, $data_nasc, $morada, $total_encomenda, $_SESSION['user_id']]);
+
+        // Limpar o carrinho após a compra com sucesso
+        unset($_SESSION['carrinho']);
 
         // Atualizar Stock
         $stmt = $pdo->prepare("UPDATE produtos SET quantidade_disponivel = quantidade_disponivel - 1 WHERE id = ?");
@@ -69,8 +90,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="checkout-card">
         <div class="checkout-header">
             <h2>Finalizar Compra</h2>
-            <p class="checkout-produto"><?= htmlspecialchars($produto['nome']) ?></p>
-            <p class="checkout-preco">&euro; <?= number_format($produto['preco_unidade'], 2, ',', ' ') ?></p>
+            <?php foreach ($produtos_no_carrinho as $p): 
+                $qtd = $_SESSION['carrinho'][$p['id']];
+            ?>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0;">
+                <span><?= htmlspecialchars($p['nome']) ?> (x<?= $qtd ?>)</span>
+                <span>&euro; <?= number_format($p['preco_unidade'] * $qtd, 2, ',', ' ') ?></span>
+            </div>
+            <?php endforeach; ?>
+            <h4 style="margin-top: 10px;">Total: &euro; <?= number_format($total_encomenda, 2, ',', ' ') ?></h4>
         </div>
 
         <div class="checkout-body">

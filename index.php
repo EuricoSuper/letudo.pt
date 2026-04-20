@@ -86,7 +86,10 @@ require_once 'config/db.php';
                     </p>
 
                     <?php if ($p['quantidade_disponivel'] > 0): ?>
-                        <a href="pages/checkout.php?id=<?= $p['id'] ?>" class="btn btn-primary">Comprar Agora</a>
+                        <form action="pages/processar_carrinho.php" method="POST" style="display:inline;">
+                            <input type="hidden" name="produto_id" value="<?= $Sp['id'] ?>">
+                            <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                        </form>
                     <?php else: ?>
                         <button class="btn btn-secondary" disabled>Esgotado</button>
                     <?php endif; ?>

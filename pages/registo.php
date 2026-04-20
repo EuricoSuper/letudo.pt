@@ -45,10 +45,6 @@ require '../config/db.php';
                     Mínimo 8 caracteres • 1 maiúscula • 1 minúscula • 1 número • 1 símbolo
                 </small>
             </div>
-            <div class="form-group">
-                <label>Confirmar Senha</label>
-                <input type="password" name="confirm_password" class="form-control" required>
-            </div>
 
             <div class="form-group">
                 <label>Morada</label>
