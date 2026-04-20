@@ -34,17 +34,17 @@ require '../config/db.php';
                 <label>Email</label>
                 <input type="email" name="email" class="form-control" required>
             </div>
-
             <div class="form-group">
-                <label>Senha</label>
-                <input type="password" name="password" class="form-control" required 
-                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
-                       title="A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial.">
-                <small style="color: #666; font-size: 0.8em; display: block; margin-top: 5px;">
-                    Obrigatório: 8+ chars, MAIÚSCULA, minúscula, número e especial (@#$...).
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" class="form-control" required minlength="8">
+
+                <label for="confirm_password" style="margin-top: 15px;">Confirmar Senha</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                
+                <small style="color:#666; font-size:0.85em; margin-top:8px; display:block;">
+                    Mínimo 8 caracteres • 1 maiúscula • 1 minúscula • 1 número • 1 símbolo
                 </small>
             </div>
-
             <div class="form-group">
                 <label>Confirmar Senha</label>
                 <input type="password" name="confirm_password" class="form-control" required>

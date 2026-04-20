@@ -20,31 +20,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erros[] = "Email inválido.";
     }
 
-    // VALIDAÇÃO OBRIGATÓRIA DE SENHA:
-    // 1. Mínimo 8 caracteres
-    // 2. Pelo menos uma letra MAIÚSCULA
-    // 3. Pelo menos uma letra minúscula
-    // 4. Pelo menos um NÚMERO
-    // 5. Pelo menos um CARACTERE ESPECIAL
     
+    // === VALIDAÇÃO FORTE DA PASSWORD ===
+
     if (strlen($password) < 8) {
-        $erros[] = "A password deve ter pelo menos 8 caracteres.";
-    }
-    if (!preg_match('/[A-Z]/', $password)) {
-        $erros[] = "A password deve conter pelo menos uma letra MAIÚSCULA.";
-    }
-    if (!preg_match('/[a-z]/', $password)) {
-        $erros[] = "A password deve conter pelo menos uma letra minúscula.";
-    }
-    if (!preg_match('/[0-9]/', $password)) {
-        $erros[] = "A password deve conter pelo menos um NÚMERO.";
-    }
-    if (!preg_match('/[\W_]/', $password)) {
-        $erros[] = "A password deve conter pelo menos um CARACTERE ESPECIAL (ex: @, #, $, %, etc.).";
+        $erros[] = "A senha deve ter no mínimo 8 caracteres.";
     }
 
-    if ($password !== $confirm) {
-        $erros[] = "As passwords não coincidem.";
+    if (!preg_match('/[A-Z]/', $password)) {
+        $erros[] = "A senha deve conter pelo menos 1 letra maiúscula (A-Z).";
+    }
+
+    if (!preg_match('/[a-z]/', $password)) {
+        $erros[] = "A senha deve conter pelo menos 1 letra minúscula (a-z).";
+    }
+
+    if (!preg_match('/[0-9]/', $password)) {
+        $erros[] = "A senha deve conter pelo menos 1 número (0-9).";
+    }
+
+    if (!preg_match('/[\W_]/', $password)) {   // caractere especial
+        $erros[] = "A senha deve conter pelo menos 1 caractere especial (@ # $ % ! etc).";
     }
 
     // Verificar se email já existe
