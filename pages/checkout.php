@@ -2,15 +2,17 @@
 session_start();
 require '../config/db.php';
 
-// 1. OBRIGAR LOGIN: Se não houver user_id na sessão, manda para o login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+// 1. Se o carrinho estiver vazio, nem deixa entrar no checkout
+if (!isset($_SESSION['carrinho']) || empty($_SESSION['carrinho'])) {
+    header("Location: ../index.php");
     exit;
 }
 
-// 2. VERIFICAR CARRINHO: Se o carrinho estiver vazio, volta para o index
-if (!isset($_SESSION['carrinho']) || empty($_SESSION['carrinho'])) {
-    echo "<script>alert('O seu carrinho está vazio!'); window.location.href='../index.php';</script>";
+// 2. SÓ OBRIGA LOGIN AQUI: Se tentar finalizar sem estar logado, vai para o login
+if (!isset($_SESSION['user_id'])) {
+    // Guarda uma mensagem para mostrar no login
+    $_SESSION['erro_login'] = "Por favor, faz login para finalizar a tua compra.";
+    header("Location: login.php");
     exit;
 }
 

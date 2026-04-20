@@ -15,19 +15,23 @@ require_once 'config/db.php';
 
 <!-- Navegação -->
 <nav class="navbar-custom">
-    <div class="container">
-        <a href="index.php" class="navbar-brand">📖 Letudo.pt</a>
-        
-        <div class="nav-buttons">
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="perfil.php" class="btn btn-outline">👤 <?= htmlspecialchars($_SESSION['user_nome'] ?? 'Conta') ?></a>
-                <a href="logout.php" class="btn btn-danger btn-sm">Sair</a>
-            <?php else: ?>
-                <a href="pages/login.php" class="btn">Entrar</a>
-                <a href="pages/registo.php" class="btn btn-primary">Registar</a>
-            <?php endif; ?>
-        </div>
-    </div>
+    <!-- NOVO: Contador do Carrinho -->
+    <?php 
+    $contagem_carrinho = isset($_SESSION['carrinho']) ? array_sum($_SESSION['carrinho']) : 0;
+    ?>
+    <a href="pages/checkout.php" class="btn btn-outline" style="position: relative;">
+        🛒 Carrinho 
+        <?php if ($contagem_carrinho > 0): ?>
+            <span style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; position: absolute; top: -5px; right: -5px;">
+                <?= $contagem_carrinho ?>
+            </span>
+        <?php endif; ?>
+    </a>
+
+    <!-- Botões de Login/Perfil que já tinhas -->
+    <?php if (isset($_SESSION['user_id'])): ?>
+        ...
+    <?php endif; ?>
 </nav>
 
 <!-- Hero Section -->
@@ -86,10 +90,10 @@ require_once 'config/db.php';
                     </p>
 
                     <?php if ($p['quantidade_disponivel'] > 0): ?>
-                        <form action="pages/processar_carrinho.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="produto_id" value="<?= $Sp['id'] ?>">
-                            <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
-                        </form>
+                    <form action="pages/processar_carrinho.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="produto_id" value="<?= $Sp['id'] ?>">
+                        <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </form>
                     <?php else: ?>
                         <button class="btn btn-secondary" disabled>Esgotado</button>
                     <?php endif; ?>
