@@ -1,94 +1,64 @@
-<?php require 'config/db.php'; ?>
+<?php include 'includes/db.php'; include 'includes/header.php'; ?>
 
-// Verifica se existe alguém logado
-$logado = isset($_SESSION['usuario_id']);
-?>
-
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livraria Online | Descobre os Melhores Livros</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-<!-- Navegacao -->
-<nav class="nav-buttons">
-    <?php if(isset($_SESSION['usuario_id'])): ?>
-        <a href="pages/perfil.php" class="btn btn-sm">👤 Minha Conta</a>
-        
-        <?php if(isset($_SESSION['admin'])): ?>
-            <a href="admin.php" class="btn btn-warning btn-sm">Painel Admin</a>
-        <?php endif; ?>
-
-        <a href="pages/logout.php" class="btn btn-outline btn-sm">Sair</a>
-
-    <?php else: ?>
-        <a href="pages/login.php" class="btn">Entrar</a>
-        <a href="pages/registo.php" class="btn">Registar</a>
-    <?php endif; ?>
-</nav>
-
-<!-- Hero -->
-<section class="hero">
-    <div class="hero-content">
-        <span class="hero-icon">&#128218;</span>
-    <h1>Livraria Letudo</h1>
-        <p class="hero-subtitle">Descobre historias que transformam vidas. Encontra o teu proximo livro favorito.</p>
-    </div>
-</section>
-
-<!-- Catalogo de Livros -->
-<section class="secao-livros">
-    <div class="secao-titulo">
-        <h2>O Nosso Catalogo</h2>
-        <p class="subtitulo">12 titulos cuidadosamente selecionados para ti</p>
-    </div>
-
-    <div class="livros-grid">
-        <?php
-        $stmt = $pdo->query("SELECT * FROM produtos");
-        while ($p = $stmt->fetch()):
-        ?>
-        <div class="livro-card">
-            <?php if($p['quantidade_disponivel'] <= 0): ?>
-                <span class="badge-esgotado">Esgotado</span>
-            <?php endif; ?>
-
-            <div class="livro-imagem">
-                <?php if(!empty($p['imagem'])): ?>
-                <img src="img/<?= htmlspecialchars($p['imagem']) ?>" alt="<?= htmlspecialchars($p['nome']) ?>" style="width: 100%; height: 100%; object-fit: contain;">
-                <?php else: ?>
-                <span style="font-size: 50px;">📖</span>
-                <?php endif; ?>
-            </div>
-
-            <div class="livro-conteudo">
-                <h3 class="livro-titulo"><?= $p['nome'] ?></h3>
-                <p class="livro-preco">
-                    <span class="moeda">&euro;</span><?= number_format($p['preco_unidade'], 2) ?>
-                </p>
-                <p class="livro-stock <?= $p['quantidade_disponivel'] > 0 ? 'stock-disponivel' : 'stock-esgotado' ?>">
-                    <?= $p['quantidade_disponivel'] > 0 ? 'Em stock' : 'Fora de stock' ?> &middot; <?= $p['quantidade_disponivel'] ?> unid.
-                </p>
-
-                <?php if($p['quantidade_disponivel'] > 0): ?>
-                    <a href="checkout.php?id=<?= $p['id'] ?>" class="btn btn-primary">Comprar Agora</a>
-                <?php else: ?>
-                    <button class="btn btn-secondary" disabled>Esgotado</button>
-                <?php endif; ?>
+<!-- BANNER PRINCIPAL (SLIDER) -->
+<section class="home-slider">
+    <div class="container">
+        <div class="slide-item" style="background-image: url('img/banner-promo.jpg'); background-color: #002d58; height: 350px; border-radius: 8px; color: white; display: flex; align-items: center; padding: 40px;">
+            <div>
+                <h1 style="font-size: 40px;">Novidades Jurídicas</h1>
+                <p>As melhores obras com 10% de desconto imediato.</p>
+                <a href="#" class="btn-primary">Saber mais</a>
             </div>
         </div>
-        <?php endwhile; ?>
     </div>
 </section>
 
-<!-- Footer -->
-<footer class="site-footer">
-    <p>&copy; 2026 Livraria Letudo. Todos os direitos reservados.</p>
-</footer>
+<!-- ÍCONES DE SERVIÇO (Igual ao site Almedina) -->
+<section class="services-bar">
+    <div class="container service-flex">
+        <div class="service-item">
+            <i class="fa fa-truck"></i>
+            <div><strong>Portes Grátis</strong><span>Em compras > 15€</span></div>
+        </div>
+        <div class="service-item">
+            <i class="fa fa-clock"></i>
+            <div><strong>Entregas 24h</strong><span>Em artigos em stock</span></div>
+        </div>
+        <div class="service-item">
+            <i class="fa fa-exchange-alt"></i>
+            <div><strong>Devoluções</strong><span>Até 30 dias</span></div>
+        </div>
+        <div class="service-item">
+            <i class="fa fa-lock"></i>
+            <div><strong>Pagamento Seguro</strong><span>MB, Visa, PayPal</span></div>
+        </div>
+    </div>
+</section>
 
-</body>
-</html>
+<main class="container">
+    <div class="section-header">
+        <h2>Destaques Almedina</h2>
+        <a href="#">Ver todos ></a>
+    </div>
+
+    <div class="book-grid">
+        <?php
+        $query = "SELECT * FROM livros LIMIT 5";
+        $res = mysqli_query($conn, $query);
+        while($row = mysqli_fetch_assoc($res)): ?>
+            <div class="book-card">
+                <div class="badge-promo">-10%</div>
+                <img src="img/<?php echo $row['imagem']; ?>" alt="Capa">
+                <p class="author"><?php echo $row['autor']; ?></p>
+                <h3 class="title"><?php echo $row['titulo']; ?></h3>
+                <div class="price-box">
+                    <span class="old-price"><?php echo number_format($row['preco']*1.1, 2); ?>€</span>
+                    <span class="current-price"><?php echo number_format($row['preco'], 2); ?>€</span>
+                </div>
+                <button class="add-to-cart">COMPRAR</button>
+            </div>
+        <?php endwhile; ?>
+    </div>
+</main>
+
+<?php include 'includes/footer.php'; ?>
