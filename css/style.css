@@ -1,762 +1,98 @@
-/* ============================================
-   Livraria Online - Estilos Personalizados
-   Tema: Livraria acolhedora com tons quentes
-   ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
-
-/* ---- Variaveis ---- */
-:root {
-    --cor-primaria: #2c1810;
-    --cor-secundaria: #8b6914;
-    --cor-dourado: #c9a227;
-    --cor-dourado-claro: #e8d5a3;
-    --cor-cream: #faf6f1;
-    --cor-branco: #ffffff;
-    --cor-texto: #3d2b1f;
-    --cor-texto-claro: #6b5b4f;
-    --cor-sucesso: #2d6a4f;
-    --cor-erro: #9b2226;
-    --cor-cinza: #e8e2db;
-    --sombra-suave: 0 2px 12px rgba(44, 24, 16, 0.08);
-    --sombra-media: 0 8px 30px rgba(44, 24, 16, 0.12);
-    --sombra-forte: 0 12px 40px rgba(44, 24, 16, 0.18);
-    --raio: 12px;
-    --raio-pequeno: 8px;
-    --transicao: all 0.3s ease;
-}
-
-/* ---- Reset e Base ---- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--cor-cream);
-    color: var(--cor-texto);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 600;
-    color: var(--cor-primaria);
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-    transition: var(--transicao);
-}
-
-/* ============================================
-   NAVEGACAO
-   ============================================ */
-
-.navbar-custom {
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, #1a0e08 100%);
-    padding: 0.75rem 0;
-    box-shadow: 0 2px 20px rgba(44, 24, 16, 0.15);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.navbar-custom .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-}
-
-.navbar-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--cor-dourado-claro) !important;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.navbar-brand:hover {
-    color: var(--cor-dourado) !important;
-}
-
-.nav-buttons {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-}
-
-/* ---- Botoes ---- */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.6rem 1.5rem;
-    border-radius: var(--raio-pequeno);
-    font-weight: 500;
-    font-size: 0.9rem;
-    border: none;
-    cursor: pointer;
-    transition: var(--transicao);
-    font-family: 'Inter', sans-serif;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--cor-secundaria) 0%, var(--cor-dourado) 100%);
-    color: var(--cor-branco);
-    box-shadow: 0 4px 15px rgba(139, 105, 20, 0.3);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 105, 20, 0.4);
-}
-
-.btn-success {
-    background: linear-gradient(135deg, var(--cor-sucesso) 0%, #40916c 100%);
-    color: var(--cor-branco);
-    box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
-}
-
-.btn-success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, var(--cor-erro) 0%, #c75050 100%);
-    color: var(--cor-branco);
-}
-
-.btn-warning {
-    background: linear-gradient(135deg, #e9c46a 0%, #f4a261 100%);
-    color: var(--cor-primaria);
-    font-weight: 600;
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--cor-dourado-claro);
-    border: 1.5px solid rgba(232, 213, 163, 0.4);
-}
-
-.btn-outline:hover {
-    background: rgba(232, 213, 163, 0.1);
-    border-color: var(--cor-dourado-claro);
-}
-
-.btn-secondary {
-    background: var(--cor-cinza);
-    color: var(--cor-texto-claro);
-    cursor: not-allowed;
-}
-
-.btn-link {
-    background: none;
-    color: var(--cor-secundaria);
-    text-decoration: none;
-    padding: 0.5rem;
-}
-
-.btn-link:hover {
-    color: var(--cor-primaria);
-}
-
-.btn-sm {
-    padding: 0.4rem 1rem;
-    font-size: 0.8rem;
-}
-
-/* ============================================
-   HERO / HEADER
-   ============================================ */
-
-.hero {
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, #4a2c1a 50%, var(--cor-secundaria) 100%);
-    padding: 5rem 1.5rem 4rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.5;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    color: var(--cor-branco);
-    margin-bottom: 0.75rem;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-.hero-subtitle {
-    font-size: 1.15rem;
-    color: var(--cor-dourado-claro);
-    font-weight: 300;
-    opacity: 0.9;
-}
-
-.hero-icon {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
-    display: block;
-}
-
-/* ============================================
-   SECCAO LIVROS
-   ============================================ */
-
-.secao-livros {
-    padding: 4rem 1.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.secao-titulo {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.secao-titulo h2 {
-    font-size: 2.2rem;
-    margin-bottom: 0.5rem;
-}
-
-.secao-titulo .subtitulo {
-    color: var(--cor-texto-claro);
-    font-size: 1rem;
-}
-
-/* ---- Grid de Livros ---- */
-.livros-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-/* ---- Card de Livro ---- */
-.livro-card {
-    background: var(--cor-branco);
-    border-radius: var(--raio);
-    overflow: hidden;
-    box-shadow: var(--sombra-suave);
-    transition: var(--transicao);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.livro-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--sombra-forte);
-}
-
-.livro-imagem {
-    width: 100%;
-    height: 250px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
     background-color: #f4f4f4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
-.livro-imagem img {
-    max-height: 220px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.livro-conteudo {
-    padding: 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.livro-titulo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--cor-primaria);
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-}
-
-.livro-preco {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--cor-sucesso);
-    margin-bottom: 0.5rem;
-}
-
-.livro-preco .moeda {
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.livro-stock {
-    font-size: 0.8rem;
-    color: var(--cor-texto-claro);
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-}
-
-.stock-disponivel::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: var(--cor-sucesso);
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.stock-esgotado::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: #999;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.livro-card .btn {
-    margin-top: auto;
-    padding: 0.85rem;
-    font-size: 0.95rem;
-}
-
-/* Badge esgotado */
-.badge-esgotado {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(155, 34, 38, 0.9);
-    color: var(--cor-branco);
-    padding: 0.35rem 0.85rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* ============================================
-   PAGINA CHECKOUT
-   ============================================ */
-
-.pagina-checkout {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1.5rem;
-    background: linear-gradient(135deg, var(--cor-cream) 0%, #f0ebe4 100%);
-}
-
-.checkout-card {
-    background: var(--cor-branco);
-    border-radius: var(--raio);
-    box-shadow: var(--sombra-media);
-    width: 100%;
-    max-width: 550px;
-    overflow: hidden;
-}
-
-.checkout-header {
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, #4a2c1a 100%);
-    color: var(--cor-branco);
-    padding: 2rem;
-    text-align: center;
-}
-
-.checkout-header h2 {
-    color: var(--cor-branco);
-    font-size: 1.6rem;
-    margin-bottom: 0.5rem;
-}
-
-.checkout-header .checkout-produto {
-    font-size: 1rem;
-    opacity: 0.9;
-    color: var(--cor-dourado-claro);
-}
-
-.checkout-header .checkout-preco {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--cor-dourado);
-    margin-top: 0.5rem;
-}
-
-.checkout-body {
-    padding: 2rem;
-}
-
-/* ---- Formularios ---- */
-.form-group {
-    margin-bottom: 1.25rem;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 500;
-    color: var(--cor-texto);
-    margin-bottom: 0.4rem;
-    font-size: 0.9rem;
-}
-
-.form-control {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    border: 1.5px solid var(--cor-cinza);
-    border-radius: var(--raio-pequeno);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    color: var(--cor-texto);
-    background: var(--cor-branco);
-    transition: var(--transicao);
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--cor-dourado);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
-}
-
-textarea.form-control {
-    resize: vertical;
-    min-height: 80px;
-}
-
-/* ---- Alertas ---- */
-.alert {
-    padding: 1rem 1.25rem;
-    border-radius: var(--raio-pequeno);
-    margin-bottom: 1.25rem;
-    font-size: 0.9rem;
-}
-
-.alert-danger {
-    background: #fde8e8;
-    border: 1px solid #f5c6cb;
-    color: var(--cor-erro);
-}
-
-.alert-success {
-    background: #e8f5e9;
-    border: 1px solid #c3e6cb;
-    color: var(--cor-sucesso);
-}
-
-/* ============================================
-   PAGINA LOGIN
-   ============================================ */
-
-.pagina-login {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1.5rem;
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, #1a0e08 50%, #3d2817 100%);
-    position: relative;
-}
-
-.pagina-login::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-.login-card {
-    background: var(--cor-branco);
-    border-radius: var(--raio);
-    box-shadow: var(--sombra-forte);
-    width: 100%;
-    max-width: 420px;
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-}
-
-.login-header {
-    background: linear-gradient(135deg, var(--cor-cream) 0%, #f0ebe4 100%);
-    padding: 2.5rem 2rem;
-    text-align: center;
-    border-bottom: 3px solid var(--cor-dourado);
-}
-
-.login-header .icon {
-    font-size: 3rem;
-    margin-bottom: 0.75rem;
-}
-
-.login-header h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
-}
-
-.login-header p {
-    color: var(--cor-texto-claro);
-    font-size: 0.9rem;
-}
-
-.login-body {
-    padding: 2rem;
-}
-
-.login-footer {
-    text-align: center;
-    padding: 1rem 2rem 2rem;
-}
-
-.login-footer a {
-    color: var(--cor-secundaria);
-    font-size: 0.85rem;
-}
-
-.login-footer a:hover {
-    color: var(--cor-primaria);
-}
-
-/* ============================================
-   PAINEL ADMIN
-   ============================================ */
-
-.pagina-admin {
-    min-height: 100vh;
-    background: var(--cor-cream);
-}
-
-.admin-header {
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, #4a2c1a 100%);
-    padding: 2rem 1.5rem;
-    color: var(--cor-branco);
-}
-
-.admin-header .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.admin-header h2 {
-    color: var(--cor-branco);
-    font-size: 1.6rem;
-}
-
-.admin-header .admin-subtitle {
-    color: var(--cor-dourado-claro);
-    font-size: 0.85rem;
-}
-
-.admin-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2.5rem 1.5rem;
-}
-
-.admin-secao {
-    margin-bottom: 3rem;
-}
-
-.admin-secao-titulo {
-    font-size: 1.3rem;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--cor-dourado);
-    display: inline-block;
-}
-
-/* ---- Tabelas Admin ---- */
-.tabela-admin {
-    width: 100%;
-    background: var(--cor-branco);
-    border-radius: var(--raio);
-    overflow: hidden;
-    box-shadow: var(--sombra-suave);
-    border-collapse: collapse;
-}
-
-.tabela-admin thead {
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, #3d2817 100%);
-    color: var(--cor-branco);
-}
-
-.tabela-admin th {
-    padding: 1rem 1.25rem;
-    text-align: left;
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.tabela-admin td {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--cor-cinza);
-    font-size: 0.9rem;
-    vertical-align: middle;
-}
-
-.tabela-admin tbody tr:hover {
-    background: #fdfbf7;
-}
-
-.tabela-admin tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.tabela-admin .form-control {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-}
-
-/* ---- Responsive ---- */
-.tabela-responsive {
-    overflow-x: auto;
-    border-radius: var(--raio);
-}
-
-/* ============================================
-   FOOTER
-   ============================================ */
-
-.site-footer {
-    background: var(--cor-primaria);
-    color: var(--cor-dourado-claro);
-    text-align: center;
-    padding: 2rem 1.5rem;
-    margin-top: 3rem;
-}
-
-.site-footer p {
-    font-size: 0.85rem;
-    opacity: 0.7;
-}
-
-/* ============================================
-   UTILITARIOS
-   ============================================ */
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 20px;
 }
 
-.w-100 {
+/* Header Estilo Almedina */
+.main-header {
+    background-color: #1a2a3a;
+    color: white;
+    padding: 15px 0;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo span { color: #e67e22; }
+
+.search-box {
+    flex-grow: 0.6;
+    display: flex;
+}
+
+.search-box input {
     width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px 0 0 4px;
 }
 
-.mt-2 {
-    margin-top: 0.75rem;
+.search-box button {
+    padding: 10px 20px;
+    background: #e67e22;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
 }
 
-.mt-3 {
-    margin-top: 1.25rem;
+.main-nav {
+    background: #2c3e50;
+    margin-top: 10px;
 }
 
-.mb-3 {
-    margin-bottom: 1.25rem;
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    padding: 10px 0;
+    margin: 0;
 }
 
-.mb-4 {
-    margin-bottom: 2rem;
+.main-nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 14px;
 }
 
-.mb-5 {
-    margin-bottom: 3rem;
+/* Grid de Livros */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
 }
 
-.my-5 {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-}
-
-.py-5 {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-}
-
-.text-center {
+.book-card {
+    background: white;
+    padding: 15px;
     text-align: center;
+    border: 1px solid #ddd;
+    transition: transform 0.2s;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .livros-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 1.25rem;
-    }
-
-    .admin-header .container {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-
-    .nav-buttons {
-        gap: 0.5rem;
-    }
-
-    .navbar-brand {
-        font-size: 1.2rem;
-    }
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-@media (max-width: 480px) {
-    .hero {
-        padding: 3rem 1rem 2.5rem;
-    }
-
-    .hero h1 {
-        font-size: 1.6rem;
-    }
-
-    .secao-livros {
-        padding: 2.5rem 1rem;
-    }
-
-    .livros-grid {
-        grid-template-columns: 1fr;
-    }
+.book-card img {
+    max-width: 100%;
+    height: 250px;
+    object-fit: contain;
 }
-
