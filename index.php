@@ -122,6 +122,33 @@ $total_itens = isset($_SESSION['carrinho']) ? array_sum($_SESSION['carrinho']) :
 <footer class="site-footer">
     <p>&copy; <?= date("Y") ?> Livraria Letudo. Todos os direitos reservados.</p>
 </footer>
-
+<script>
+document.querySelectorAll(".btn-add-cart").forEach(button => {
+    button.addEventListener("click", function() {
+        const produtoId = this.getAttribute("data-id");
+        
+        fetch("pages/processar_carrinho.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "produto_id=" + produtoId
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                document.getElementById("cart-count").innerText = data.total_itens;
+                
+                // Feedback visual
+                this.innerText = "✅ Adicionado!";
+                this.classList.add("btn-success");
+                setTimeout(() => {
+                    this.innerText = "Adicionar ao Carrinho";
+                    this.classList.remove("btn-success");
+                }, 2000);
+            }
+        })
+        .catch(error => console.error("Erro ao adicionar ao carrinho:", error));
+    });
+});
+</script>
 </body>
 </html>

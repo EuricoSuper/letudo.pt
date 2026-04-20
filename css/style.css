@@ -185,6 +185,7 @@ a {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    margin-left: 15px; /* Ajusta conforme o layout da tua navbar */
 }
 
 .btn-carrinho .badge {
@@ -197,6 +198,17 @@ a {
     padding: 2px 7px;
     font-size: 12px;
     font-weight: bold;
+    min-width: 20px; /* Para garantir que o círculo é visível mesmo com 1 dígito */
+    text-align: center;
+}
+
+.btn-carrinho .icon {
+    font-size: 20px; /* Tamanho do ícone do carrinho */
+    margin-right: 5px;
+}
+
+.btn-carrinho .text {
+    font-size: 14px;
 }
 
 /* ============================================
