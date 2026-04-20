@@ -1,64 +1,50 @@
-<?php include 'includes/db.php'; include 'includes/header.php'; ?>
-
-<!-- BANNER PRINCIPAL (SLIDER) -->
-<section class="home-slider">
-    <div class="container">
-        <div class="slide-item" style="background-image: url('img/banner-promo.jpg'); background-color: #002d58; height: 350px; border-radius: 8px; color: white; display: flex; align-items: center; padding: 40px;">
-            <div>
-                <h1 style="font-size: 40px;">Novidades Jurídicas</h1>
-                <p>As melhores obras com 10% de desconto imediato.</p>
-                <a href="#" class="btn-primary">Saber mais</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ÍCONES DE SERVIÇO (Igual ao site Almedina) -->
-<section class="services-bar">
-    <div class="container service-flex">
-        <div class="service-item">
-            <i class="fa fa-truck"></i>
-            <div><strong>Portes Grátis</strong><span>Em compras > 15€</span></div>
-        </div>
-        <div class="service-item">
-            <i class="fa fa-clock"></i>
-            <div><strong>Entregas 24h</strong><span>Em artigos em stock</span></div>
-        </div>
-        <div class="service-item">
-            <i class="fa fa-exchange-alt"></i>
-            <div><strong>Devoluções</strong><span>Até 30 dias</span></div>
-        </div>
-        <div class="service-item">
-            <i class="fa fa-lock"></i>
-            <div><strong>Pagamento Seguro</strong><span>MB, Visa, PayPal</span></div>
-        </div>
-    </div>
-</section>
+<?php 
+include 'includes/db.php'; 
+include 'includes/header.php'; 
+?>
 
 <main class="container">
-    <div class="section-header">
-        <h2>Destaques Almedina</h2>
-        <a href="#">Ver todos ></a>
+    <div class="almedina-banner">
+        <h1>Livraria LêTudo</h1>
+        <p>Projeto Final - Avançado em Desenho e Programação</p>
     </div>
 
-    <div class="book-grid">
-        <?php
-        $query = "SELECT * FROM livros LIMIT 5";
-        $res = mysqli_query($conn, $query);
-        while($row = mysqli_fetch_assoc($res)): ?>
-            <div class="book-card">
-                <div class="badge-promo">-10%</div>
-                <img src="img/<?php echo $row['imagem']; ?>" alt="Capa">
-                <p class="author"><?php echo $row['autor']; ?></p>
-                <h3 class="title"><?php echo $row['titulo']; ?></h3>
-                <div class="price-box">
-                    <span class="old-price"><?php echo number_format($row['preco']*1.1, 2); ?>€</span>
-                    <span class="current-price"><?php echo number_format($row['preco'], 2); ?>€</span>
+    <section class="store-section">
+        <h2 class="section-title">Livros Disponíveis</h2>
+        <form id="shop-form" action="checkout.php" method="POST">
+            <div class="book-grid">
+                <?php
+                $res = mysqli_query($conn, "SELECT * FROM produtos");
+                while($row = mysqli_fetch_assoc($res)):
+                ?>
+                <div class="book-card" data-id="<?php echo $row['id']; ?>">
+                    <img src="img/<?php echo $row['imagem']; ?>" alt="Capa">
+                    <h3><?php echo $row['nome']; ?></h3>
+                    <p class="stock">Stock: <span class="stock-qty"><?php echo $row['quantidade_stock']; ?></span></p>
+                    <p class="price-tag"><?php echo $row['preco']; ?>€</p>
+                    
+                    <?php if($row['quantidade_stock'] > 0): ?>
+                        <input type="number" name="qty[<?php echo $row['id']; ?>]" 
+                               class="qty-input" min="0" 
+                               max="<?php echo $row['quantidade_stock']; ?>" 
+                               data-price="<?php echo $row['preco']; ?>" value="0">
+                    <?php else: ?>
+                        <p class="no-stock">Sem Stock Disponível</p>
+                    <?php endif; ?>
                 </div>
-                <button class="add-to-cart">COMPRAR</button>
+                <?php endwhile; ?>
             </div>
-        <?php endwhile; ?>
-    </div>
+
+            <!-- BARRA DE COMPRA FIXA (ESTILO MODERNO) -->
+            <div class="cart-summary-bar">
+                <div class="total-info">
+                    Total da Compra: <span id="display-total">0.00</span>€
+                </div>
+                <button type="submit" class="btn-checkout">CONCLUIR COMPRA</button>
+            </div>
+        </form>
+    </section>
 </main>
 
+<script src="js/loja.js"></script>
 <?php include 'includes/footer.php'; ?>
