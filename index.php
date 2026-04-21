@@ -1,94 +1,123 @@
-<?php require 'config/db.php'; ?>
+<?php 
+require_once 'config/db.php';
+$pageTitle = "Loja Online - Letudo.pt";
+include 'includes/header.php'; 
 
-// Verifica se existe alguém logado
-$logado = isset($_SESSION['usuario_id']);
+// Buscar produtos
+$query = "SELECT id, nome, descricao, quantidade_disponivel, preco_unidade, imagem FROM produtos WHERE quantidade_disponivel > 0 ORDER BY id DESC";
+$result = mysqli_query($conn, $query);
 ?>
 
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livraria Online | Descobre os Melhores Livros</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-<!-- Navegacao -->
-<nav class="nav-buttons">
-    <?php if(isset($_SESSION['usuario_id'])): ?>
-        <a href="pages/perfil.php" class="btn btn-sm">👤 Minha Conta</a>
-        
-        <?php if(isset($_SESSION['admin'])): ?>
-            <a href="admin.php" class="btn btn-warning btn-sm">Painel Admin</a>
-        <?php endif; ?>
-
-        <a href="pages/logout.php" class="btn btn-outline btn-sm">Sair</a>
-
-    <?php else: ?>
-        <a href="pages/login.php" class="btn">Entrar</a>
-        <a href="pages/registo.php" class="btn">Registar</a>
-    <?php endif; ?>
-</nav>
-
-<!-- Hero -->
-<section class="hero">
-    <div class="hero-content">
-        <span class="hero-icon">&#128218;</span>
-    <h1>Livraria Letudo</h1>
-        <p class="hero-subtitle">Descobre historias que transformam vidas. Encontra o teu proximo livro favorito.</p>
+<!-- Banner Rotativo -->
+<section class="banner-home">
+    <div class="banner-slider">
+        <img src="img/banner1.jpg" alt="Promoção Especial">
+        <img src="img/banner2.jpg" alt="Novidades">
+        <img src="img/banner3.jpg" alt="Mais Vendidos">
     </div>
 </section>
 
-<!-- Catalogo de Livros -->
-<section class="secao-livros">
-    <div class="secao-titulo">
-        <h2>O Nosso Catalogo</h2>
-        <p class="subtitulo">12 titulos cuidadosamente selecionados para ti</p>
-    </div>
-
-    <div class="livros-grid">
-        <?php
-        $stmt = $pdo->query("SELECT * FROM produtos");
-        while ($p = $stmt->fetch()):
-        ?>
-        <div class="livro-card">
-            <?php if($p['quantidade_disponivel'] <= 0): ?>
-                <span class="badge-esgotado">Esgotado</span>
-            <?php endif; ?>
-
-            <div class="livro-imagem">
-                <?php if(!empty($p['imagem'])): ?>
-                <img src="img/<?= htmlspecialchars($p['imagem']) ?>" alt="<?= htmlspecialchars($p['nome']) ?>" style="width: 100%; height: 100%; object-fit: contain;">
-                <?php else: ?>
-                <span style="font-size: 50px;">📖</span>
-                <?php endif; ?>
+<div class="container">
+    <h1>Nossos Produtos</h1>
+    <p class="subtitle">Descubra os melhores produtos ao melhor preço</p>
+    
+    <?php if(mysqli_num_rows($result) > 0): ?>
+        <div class="produtos-grid">
+            <?php while($p = mysqli_fetch_assoc($result)): ?>
+                <div class="produto-card" data-preco="<?= $p['preco_unidade'] ?>" data-id="<?= $p['id'] ?>">
+                    <img src="img/<?= htmlspecialchars($p['imagem']) ?>" 
+                         alt="<?= htmlspecialchars($p['nome']) ?>"
+                         onerror="this.src='img/default.jpg'">
+                    
+                    <div class="produto-info">
+                        <h3><?= htmlspecialchars($p['nome']) ?></h3>
+                        <p class="descricao"><?= htmlspecialchars($p['descricao']) ?></p>
+                        
+                        <div class="preco"><?= number_format($p['preco_unidade'], 2, ',', '.') ?></div>
+                        
+                        <div class="quantidade-wrapper">
+                            <label for="qty-<?= $p['id'] ?>">Quantidade:</label>
+                            <input type="number" 
+                                   id="qty-<?= $p['id'] ?>"
+                                   class="qty-input" 
+                                   min="1" 
+                                   max="<?= $p['quantidade_disponivel'] ?>" 
+                                   value="1" 
+                                   data-stock="<?= $p['quantidade_disponivel'] ?>">
+                            <span class="stock-msg">✓ Stock: <?= $p['quantidade_disponivel'] ?> unidades</span>
+                        </div>
+                        
+                        <button class="btn-adicionar" 
+                                onclick="adicionarAoCarrinho(<?= $p['id'] ?>, '<?= addslashes($p['nome']) ?>', <?= $p['preco_unidade'] ?>)">
+                            🛒 Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
+        
+        <div class="carrinho-flutuante">
+            <div>
+                <p>Total: <span id="total-carrinho">0,00 €</span></p>
+                <small>Os portes de envio serão calculados no checkout</small>
             </div>
-
-            <div class="livro-conteudo">
-                <h3 class="livro-titulo"><?= $p['nome'] ?></h3>
-                <p class="livro-preco">
-                    <span class="moeda">&euro;</span><?= number_format($p['preco_unidade'], 2) ?>
-                </p>
-                <p class="livro-stock <?= $p['quantidade_disponivel'] > 0 ? 'stock-disponivel' : 'stock-esgotado' ?>">
-                    <?= $p['quantidade_disponivel'] > 0 ? 'Em stock' : 'Fora de stock' ?> &middot; <?= $p['quantidade_disponivel'] ?> unid.
-                </p>
-
-                <?php if($p['quantidade_disponivel'] > 0): ?>
-                    <a href="checkout.php?id=<?= $p['id'] ?>" class="btn btn-primary">Comprar Agora</a>
-                <?php else: ?>
-                    <button class="btn btn-secondary" disabled>Esgotado</button>
-                <?php endif; ?>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="checkout.php" class="btn-concluir">✓ Concluir Compra</a>
+                <a href="admin/login.php" class="link-admin">⚙️ Área de Administração</a>
             </div>
         </div>
-        <?php endwhile; ?>
-    </div>
-</section>
+    <?php else: ?>
+        <div class="aviso">
+            <p>📦 Não existem produtos disponíveis de momento.</p>
+            <p class="mt-2">Volte mais tarde!</p>
+        </div>
+    <?php endif; ?>
+</div>
 
-<!-- Footer -->
-<footer class="site-footer">
-    <p>&copy; 2026 Livraria Letudo. Todos os direitos reservados.</p>
-</footer>
+<script>
+let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
 
-</body>
-</html>
+function atualizarTotal() {
+    let total = 0;
+    carrinho.forEach(item => total += item.preco * item.qtd);
+    document.getElementById('total-carrinho').textContent = total.toFixed(2).replace('.', ',') + ' €';
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+}
+
+function adicionarAoCarrinho(id, nome, preco) {
+    const input = document.querySelector(`.produto-card[data-id="${id}"] .qty-input`);
+    const qtd = parseInt(input.value);
+    const stock = parseInt(input.dataset.stock);
+    
+    if(qtd > stock) {
+        alert('⚠️ Quantidade superior ao stock disponível!');
+        return;
+    }
+    
+    const existente = carrinho.find(i => i.id === id);
+    if(existente) {
+        existente.qtd += qtd;
+    } else {
+        carrinho.push({id, nome, preco, qtd});
+    }
+    
+    atualizarTotal();
+    
+    // Animação de sucesso
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '✓ Adicionado!';
+    btn.style.background = 'linear-gradient(135deg, #059669 0%, #10b981 100%)';
+    
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+    }, 1500);
+    
+    input.value = 1;
+}
+
+document.addEventListener('DOMContentLoaded', atualizarTotal);
+</script>
+
+<?php include 'includes/footer.php'; ?>
