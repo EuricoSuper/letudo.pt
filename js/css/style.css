@@ -1,0 +1,519 @@
+/* ============================================
+   LETUDO.PT - DESIGN PROFISSIONAL (ESTILO ALMEDINA)
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cor-primaria: #1e3a8a;      /* Azul escuro profissional */
+    --cor-secundaria: #dc2626;    /* Vermelho destaque */
+    --cor-destaque: #f59e0b;      /* Laranja para promoções */
+    --cor-fundo: #f3f4f6;         /* Cinza claro fundo */
+    --cor-texto: #1f2937;         /* Cinza escuro texto */
+    --cor-branco: #ffffff;
+    --sombra-suave: 0 2px 8px rgba(0,0,0,0.08);
+    --sombra-media: 0 4px 16px rgba(0,0,0,0.12);
+    --sombra-forte: 0 8px 32px rgba(0,0,0,0.15);
+    --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.6;
+}
+
+/* ============================================
+   HEADER PROFISSIONAL
+   ============================================ */
+header {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, #2563eb 100%);
+    box-shadow: var(--sombra-media);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.logo h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--cor-branco);
+    letter-spacing: -1px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.logo a {
+    text-decoration: none;
+    color: inherit;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: var(--cor-branco);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: var(--transicao);
+    position: relative;
+}
+
+nav a:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--cor-destaque);
+    transition: width 0.3s;
+}
+
+nav a:hover::after {
+    width: 80%;
+}
+
+/* ============================================
+   CONTAINER PRINCIPAL
+   ============================================ */
+
+   .banner-home {
+    margin-bottom: 3rem;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.banner-slider img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.container h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--cor-primaria);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.container > .subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   GRID DE PRODUTOS (ESTILO ALMEDINA)
+   ============================================ */
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.produto-card {
+    background: var(--cor-branco);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+    transition: var(--transicao);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid #e5e7eb;
+}
+
+.produto-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--sombra-forte);
+}
+
+.produto-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--cor-primaria), var(--cor-secundaria));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.produto-card:hover::before {
+    opacity: 1;
+}
+
+.produto-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    transition: transform 0.5s;
+}
+
+.produto-card:hover img {
+    transform: scale(1.05);
+}
+
+.produto-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.produto-info h3 {
+    font-size: 1.15rem;
+    color: var(--cor-texto);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.descricao {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.preco {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--cor-primaria);
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.preco::before {
+    content: '€';
+    font-size: 1.2rem;
+    color: #9ca3af;
+}
+
+/* ============================================
+   CONTROLOS DE QUANTIDADE
+   ============================================ */
+.quantidade-wrapper {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+}
+
+.quantidade-wrapper label {
+    display: block;
+    font-weight: 600;
+    color: var(--cor-texto);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.qty-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    text-align: center;
+    transition: var(--transicao);
+    font-weight: 600;
+}
+
+.qty-input:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.stock-msg {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #059669;
+    font-weight: 500;
+}
+
+/* ============================================
+   BOTÕES PROFISSIONAIS
+   ============================================ */
+.btn-adicionar {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, #2563eb 100%);
+    color: var(--cor-branco);
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transicao);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+.btn-adicionar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+    background: linear-gradient(135deg, #2563eb 0%, var(--cor-primaria) 100%);
+}
+
+.btn-adicionar:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   BARRA DE CARRINHO FLUTUANTE
+   ============================================ */
+.carrinho-flutuante {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, #1e40af 100%);
+    color: var(--cor-branco);
+    padding: 2rem;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    box-shadow: var(--sombra-forte);
+    position: sticky;
+    bottom: 2rem;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carrinho-flutuante p {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.carrinho-flutuante p span {
+    color: var(--cor-destaque);
+}
+
+.btn-concluir {
+    background: linear-gradient(135deg, var(--cor-secundaria) 0%, #b91c1c 100%);
+    color: var(--cor-branco);
+    text-decoration: none;
+    padding: 1.25rem 2.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: var(--transicao);
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-concluir:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.5);
+}
+
+.link-admin {
+    color: #93c5fd;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: var(--transicao);
+    border-bottom: 1px dashed #93c5fd;
+}
+
+.link-admin:hover {
+    color: var(--cor-branco);
+    border-bottom-color: var(--cor-branco);
+}
+
+/* ============================================
+   MENSAGENS DE FEEDBACK
+   ============================================ */
+.mensagem {
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    animation: fadeIn 0.4s ease-out;
+    border-left: 4px solid;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mensagem-sucesso {
+    background: #d1fae5;
+    color: #065f46;
+    border-left-color: #059669;
+}
+
+.mensagem-erro {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left-color: var(--cor-secundaria);
+}
+
+.mensagem-aviso {
+    background: #fef3c7;
+    color: #92400e;
+    border-left-color: var(--cor-destaque);
+}
+
+/* ============================================
+   FOOTER PROFISSIONAL
+   ============================================ */
+footer {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    color: var(--cor-branco);
+    text-align: center;
+    padding: 3rem 2rem;
+    margin-top: 4rem;
+}
+
+footer p {
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+/* ============================================
+   RESPONSIVIDADE MOBILE-FIRST
+   ============================================ */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .logo h1 {
+        font-size: 1.75rem;
+    }
+    
+    nav ul {
+        gap: 1rem;
+        justify-content: center;
+    }
+    
+    nav a {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .container {
+        padding: 2rem 1rem;
+    }
+    
+    .container h1 {
+        font-size: 2rem;
+    }
+    
+    .produtos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .produto-card img {
+        height: 220px;
+    }
+    
+    .carrinho-flutuante {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+        bottom: 1rem;
+    }
+    
+    .carrinho-flutuante p {
+        font-size: 1.5rem;
+    }
+    
+    .btn-concluir {
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .produtos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ============================================
+   UTILITÁRIOS
+   ============================================ */
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.aviso {
+    text-align: center;
+    padding: 3rem;
+    background: var(--cor-branco);
+    border-radius: 12px;
+    box-shadow: var(--sombra-suave);
+    color: #6b7280;
+    font-size: 1.1rem;
+}
